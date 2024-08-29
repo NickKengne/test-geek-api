@@ -58,4 +58,20 @@ public class TaskController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{taskId}")
+    public ResponseEntity<?> updateTask(@PathVariable("taskId") Integer taskId, @RequestBody TaskDto taskDto){
+        var task = taskRepository.findById(taskId);
+        if (task.isEmpty()){
+            response.put("message","Task doesn't found !");
+            response.put("status", String.valueOf(HttpStatus.NOT_FOUND));
+        }
+        else{
+            task.get().setTask(taskDto.getTask());
+            taskRepository.save(task.get());
+            response.put("message","Task updated successfully !");
+            response.put("status", String.valueOf(HttpStatus.ACCEPTED));
+        }
+        return ResponseEntity.ok(response);
+    }
+
 }
